@@ -329,18 +329,6 @@ void checkForPacketArrival(RTSPClient* rtspClient) {
 	UsageEnvironment& env = rtspClient->envir(); // alias
 	StreamClientState& scs = ((strmRTSPClient*)rtspClient)->m_scs; // alias
 
-	/*static int counter = 0;
-	counter += 100000;
-	if (counter == 10000000) {
-		counter = 0;
-		g_mapRtspData[((strmRTSPClient*) rtspClient)->m_nIpcID].bReconnect = true;
-		g_mapRtspData[((strmRTSPClient*) rtspClient)->m_nIpcID].timeWithNoData = 0;
-		g_pfCallback(cb_prepareReconnect, NULL, NULL,
-				((strmRTSPClient*) rtspClient)->m_pStreamObj);
-		shutdownStream(g_mapRtspData[((strmRTSPClient*) rtspClient)->m_nIpcID].rtspClient);
-		return;
-	}*/
-
 	MediaSubsessionIterator iter(*scs.m_pSession);
 	MediaSubsession* subsession;
 	int nIpcID = ((strmRTSPClient*) rtspClient)->m_nIpcID;
@@ -417,13 +405,6 @@ int CRtspParser::rtspClientOpenAndPlay(char const* progName, char const* rtspURL
 
 	pEnv->taskScheduler().doEventLoop(&g_mapRtspData[nIpcID].eventLoopWatchVariable);
 
-	if(g_mapRtspData[nIpcID].nReconnectCount >= 10) {		// Retry connection to rtsp server about 10 times
-		if (g_pfCallback) {
-			g_mapRtspData[nIpcID].bReconnect = false;
-			g_pfCallback(cb_receiveNoData, NULL, NULL, ((strmRTSPClient*) rtspClient)->m_pStreamObj);
-		}
-	}
-
 	map<int, RtspData>::iterator it;
 	while (g_mapRtspData[nIpcID].bReconnect) {
 		int tmp = g_mapRtspData[nIpcID].nReconnectCount;
@@ -455,6 +436,14 @@ int CRtspParser::rtspClientOpenAndPlay(char const* progName, char const* rtspURL
 		rtspClient->sendDescribeCommand(continueAfterDESCRIBE);
 
 		pEnv->taskScheduler().doEventLoop(&g_mapRtspData[nIpcID].eventLoopWatchVariable);
+
+		if(g_mapRtspData[nIpcID].nReconnectCount >= 10) {		// Retry connection to rtsp server about 10 times
+			if (g_pfCallback) {
+				g_mapRtspData[nIpcID].bReconnect = false;
+				g_pfCallback(cb_receiveNoData, NULL, NULL,
+						((strmRTSPClient*) rtspClient)->m_pStreamObj);
+			}
+		}
 	}
 
 	if ((it = g_mapRtspData.find(nIpcID)) != g_mapRtspData.end()) {

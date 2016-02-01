@@ -123,12 +123,12 @@ void DataSink::afterGettingFrame(void* clientData, unsigned frameSize, unsigned 
 }
 
 // If you don't want to see debugging output for each received frame, then comment out the following line:
-#define DEBUG_PRINT_EACH_RECEIVED_FRAME 1
+//#define DEBUG_PRINT_EACH_RECEIVED_FRAME 1
 
 void DataSink::afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes,
 				  struct timeval presentationTime, unsigned /*durationInMicroseconds*/) {
 	// We've just received a frame of data.  (Optionally) print out information about it:
-/*#ifdef DEBUG_PRINT_EACH_RECEIVED_FRAME
+#ifdef DEBUG_PRINT_EACH_RECEIVED_FRAME
 	if (m_pStreamId != NULL)
 		envir() << "Stream \"" << m_pStreamId << "\"; ";
 	envir() << m_Subsession.mediumName() << "/" << m_Subsession.codecName() << ":\tReceived " << frameSize << " bytes";
@@ -146,7 +146,7 @@ void DataSink::afterGettingFrame(unsigned frameSize, unsigned numTruncatedBytes,
 	envir() << "\tNPT: " << fSubsession.getNormalPlayTime(presentationTime);
 #endif
 	envir() << "\n";
-#endif*/
+#endif
 
 	// Then continue, to request the next frame of data:
 	continuePlaying();
