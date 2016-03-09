@@ -8,4 +8,4 @@ This is a RTSP client parser referred to openRTSP in Live555. It provides some e
 
 ### How do I get set up? ###
 
-The project is implemented on Linux. You should build the Live555 library first for this parser.
+The project is implemented on Linux. You should build the Live555 library first for this parser. The application will just include the RtspParser.h directly for invoking the related APIs.
