@@ -4,8 +4,8 @@ This README would normally document whatever steps are necessary to get your app
 
 ### What is this repository for? ###
 
-This is a RTSP client parser referred to openRTSP in Live555. It provides some essential APIs for application layer and can handle multiple streams at the same time.
+This project provides some essential APIs for application layer and can handle multiple streams at the same time.
 
 ### How do I get set up? ###
 
-The project is implemented on Linux. You should build the Live555 library first for this parser. Applications just include the RtspParser.h directly for invoking the related APIs.
+This project is implemented on Linux. You should build the Live555 library first for this parser. Applications just include the RtspParser.h directly for invoking the related APIs.
